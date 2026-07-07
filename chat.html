@@ -59,9 +59,10 @@ textarea:focus{outline:1px solid var(--green)}
 .gatecard input{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px;color:var(--txt);font-size:1rem;padding:12px;text-align:center;margin-bottom:10px}
 .gatecard button{width:100%;background:var(--green);color:#04140a;border:none;border-radius:10px;font-weight:900;padding:12px;font-size:.95rem;cursor:pointer}
 .gateerr{color:#ff5252;font-size:.75rem;min-height:16px;margin-top:6px}
-.namerow{display:flex;gap:8px;margin-bottom:10px}
-.namerow button{flex:1;background:var(--panel2);color:var(--mut);border:1px solid var(--line)}
-.namerow button.sel{background:rgba(0,230,118,.12);color:var(--green);border-color:var(--green)}
+.steplbl{font-size:.7rem;font-weight:800;letter-spacing:.06em;color:var(--gold);text-transform:uppercase;text-align:left;margin:4px 0 7px}
+.namerow{display:flex;gap:8px;margin-bottom:14px}
+.namerow button{flex:1;background:var(--panel2);color:var(--txt);border:2px solid var(--line);font-size:1rem;padding:14px 0}
+.namerow button.sel{background:var(--green);color:#04140a;border-color:var(--green)}
 </style>
 </head>
 <body>
@@ -71,12 +72,14 @@ textarea:focus{outline:1px solid var(--green)}
     <div class="logo" style="justify-content:center">ARB<em>CLUB</em>+ <small>PARTNER CHAT</small></div>
     <h1>Private channel</h1>
     <p>Partners only. Pick who you are and enter the access code Jordan gave you.</p>
+    <div class="steplbl" id="step1lbl">Step 1 — who are you?</div>
     <div class="namerow">
       <button id="nJordan" onclick="pickName('Jordan')">Jordan</button>
       <button id="nSean" onclick="pickName('Sean')">Sean</button>
     </div>
-    <input id="codeIn" type="password" placeholder="Access code" onkeydown="if(event.key==='Enter')enter()">
-    <button onclick="enter()">Enter</button>
+    <div class="steplbl" id="step2lbl" style="opacity:.35">Step 2 — enter the code</div>
+    <input id="codeIn" type="text" autocapitalize="off" autocomplete="off" placeholder="Access code" onkeydown="if(event.key==='Enter')enter()">
+    <button id="enterBtn" onclick="enter()">Enter chat →</button>
     <div class="gateerr" id="gateErr"></div>
   </div>
 </div>
@@ -109,7 +112,8 @@ let CODE = localStorage.getItem('arb_code') || '';
 let NAME = localStorage.getItem('arb_name') || '';
 const $ = id => document.getElementById(id);
 
-function pickName(n){ NAME = n; $('nJordan').classList.toggle('sel', n==='Jordan'); $('nSean').classList.toggle('sel', n==='Sean'); }
+function pickName(n){ NAME = n; $('nJordan').classList.toggle('sel', n==='Jordan'); $('nSean').classList.toggle('sel', n==='Sean');
+  const s2=$('step2lbl'); if(s2){s2.style.opacity='1';} const c=$('codeIn'); if(c){c.focus();} }
 if (NAME) pickName(NAME);
 
 function addMsg(who, text){
