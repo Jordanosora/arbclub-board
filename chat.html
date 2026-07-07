@@ -106,9 +106,8 @@ textarea:focus{outline:1px solid var(--green)}
   </div>
   <div class="quickrow">
     <button class="qbtn" onclick="quick('Catch me up — where are we at right now?')">📊 Where are we at?</button>
-    <button class="qbtn" onclick="quick('handover')">📋 ChatGPT handover note</button>
   </div>
-  <div class="foot">Replies in a few seconds · every exchange is logged · AURA knows this venture only · big-picture calls stay with Jordan · 18+, no betting service operated here</div>
+  <div class="foot">Messages queue to the build engine · real answers land within hours · every exchange is logged · big-picture calls stay with Jordan · 18+, no betting service operated here</div>
 </div>
 
 <script>
@@ -151,11 +150,11 @@ async function enter(){
 
 const WELCOME = `Welcome in, ${'${NAME}'}. I'm AURA — your line straight into the ARBCLUB+ build.
 
-**What this is:** a private channel between you, Jordan and me. Type here like you'd text a mate — an idea, a question, a "what if we…", a "that's wrong, change it." I answer in a few seconds, and I know this whole venture inside out.
+**What this is:** a private channel between you, Jordan and me. Type here like you'd text a mate — an idea, a question, a "what if we…", a "that's wrong, change it." Your message goes straight into the build engine's queue: the real AURA (full research and build access, working alongside Jordan) picks it up and a proper answer lands back here — usually within hours, not seconds. Slower, but it's the real thing: live web research, real code, real decisions.
 
 **How it connects to the board:** the build board (tap "← Build board" up top) is the live scoreboard — every step, every feature, updated as we go. This chat is where the *thinking* happens; the board is where you *watch it land*. Anything buildable you raise here gets turned into real code on the build side — same as your four engine features did.
 
-**What it does for you:** you're the betting brain here — you know arbing better than any of us. So on the product, I take your lead: good ideas get built, you don't wait on permission. The only things I bump up to Jordan are the big-picture calls (money, going public, who's in). And if we ever hit an AI usage limit, type **"handover"** and I'll hand you a note to keep going in ChatGPT, then paste it back here.
+**What it does for you:** you're the betting brain here — you know arbing better than any of us. So on the product, I take your lead: good ideas get built, you don't wait on permission. The only things that go to Jordan first are the big-picture calls (money, going public, who's in). Drop as many thoughts as you like — everything queues, nothing gets lost, and each pickup answers the lot.
 
 So — what do you want to do first? Kick the tyres, throw me an idea, or want me to walk you through where we're at?`;
 function renderThread(thread){
@@ -180,7 +179,7 @@ async function send(){
       body: JSON.stringify({ code: CODE, name: NAME, message: text }) });
     const data = await r.json();
     t.remove();
-    addMsg('AURA', data.reply || data.error || '(no reply)');
+    if (data.reply || data.error) addMsg('AURA', data.reply || data.error);
   } catch(e) { t.remove(); addSys('Connection hiccup — try again.'); }
   busy = false; $('sendBtn').disabled = false; $('box').focus();
 }
