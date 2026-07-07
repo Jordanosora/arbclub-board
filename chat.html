@@ -48,7 +48,10 @@ textarea:focus{outline:1px solid var(--green)}
 .send{background:var(--green);color:#04140a;border:none;border-radius:12px;font-weight:900;font-size:.9rem;padding:12px 20px;cursor:pointer;transition:transform .1s}
 .send:active{transform:scale(.95)}
 .send:disabled{opacity:.4}
-.foot{max-width:760px;margin:0 auto;padding:0 16px 10px;font-size:.6rem;color:var(--mut);text-align:center}
+.quickrow{max-width:760px;margin:0 auto;padding:8px 16px 0;display:flex;gap:8px;flex-wrap:wrap}
+.qbtn{background:var(--panel2);border:1px solid var(--line);color:var(--mut);border-radius:99px;padding:6px 12px;font-size:.74rem;cursor:pointer}
+.qbtn:hover{border-color:var(--green);color:var(--green)}
+.foot{max-width:760px;margin:0 auto;padding:8px 16px 10px;font-size:.6rem;color:var(--mut);text-align:center}
 
 /* access gate */
 #gate{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:10}
@@ -101,7 +104,11 @@ textarea:focus{outline:1px solid var(--green)}
       oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,130)+'px'"></textarea>
     <button class="send" id="sendBtn" onclick="send()">Send</button>
   </div>
-  <div class="foot">Replies in a few seconds · every exchange is logged · AURA knows this venture only · decisions stay with Jordan · 18+, no betting service operated here</div>
+  <div class="quickrow">
+    <button class="qbtn" onclick="quick('Catch me up — where are we at right now?')">📊 Where are we at?</button>
+    <button class="qbtn" onclick="quick('handover')">📋 ChatGPT handover note</button>
+  </div>
+  <div class="foot">Replies in a few seconds · every exchange is logged · AURA knows this venture only · big-picture calls stay with Jordan · 18+, no betting service operated here</div>
 </div>
 
 <script>
@@ -142,12 +149,22 @@ async function enter(){
   } catch(e) { $('gateErr').textContent = 'Cannot reach the engine — tell Jordan.'; }
 }
 
+const WELCOME = `Welcome in, ${'${NAME}'}. I'm AURA — your line straight into the ARBCLUB+ build.
+
+**What this is:** a private channel between you, Jordan and me. Type here like you'd text a mate — an idea, a question, a "what if we…", a "that's wrong, change it." I answer in a few seconds, and I know this whole venture inside out.
+
+**How it connects to the board:** the build board (tap "← Build board" up top) is the live scoreboard — every step, every feature, updated as we go. This chat is where the *thinking* happens; the board is where you *watch it land*. Anything buildable you raise here gets turned into real code on the build side — same as your four engine features did.
+
+**What it does for you:** you're the betting brain here — you know arbing better than any of us. So on the product, I take your lead: good ideas get built, you don't wait on permission. The only things I bump up to Jordan are the big-picture calls (money, going public, who's in). And if we ever hit an AI usage limit, type **"handover"** and I'll hand you a note to keep going in ChatGPT, then paste it back here.
+
+So — what do you want to do first? Kick the tyres, throw me an idea, or want me to walk you through where we're at?`;
 function renderThread(thread){
   $('thread').innerHTML = '';
-  if (!thread.length) addSys('Channel open. Say anything — AURA replies in a few seconds.');
+  if (!thread.length) { addMsg('AURA', WELCOME.replace('${NAME}', NAME)); return; }
   for (const m of thread.slice(-100)) addMsg(m.who, m.text);
 }
 
+function quick(text){ if(busy) return; $('box').value = text; send(); }
 let busy = false;
 async function send(){
   const text = $('box').value.trim();
